@@ -1,0 +1,12 @@
+{
+	"name": "junctionxvienna2019",
+	"version": "0.0.1",
+	"scripts": {
+		"fmt": "npx prettier --write '**/*.js{on,}'"
+	},
+	"devDependencies": {
+		"prettier": "*",
+		"typescript": "^3.5",
+		"webextension-polyfill": "^0.4.0"
+	}
+}
