@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "Cloudinary Extension",
-	"version": "1.0",
+	"name": "JunctionX Vienna 2019 Prototype",
+	"version": "0.0.1",
 
-	"description": "No description defined.",
+	"description": "MITM extension for Cloudinary.",
 
 	"icons": {
 		"48": "icons/border-48.png"
