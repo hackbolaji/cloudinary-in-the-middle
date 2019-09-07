@@ -5,10 +5,8 @@ if (!IS_CHROME) {
 	TYPES.push('imageset')
 }
 
-const URLS = ['http://*/*', 'https://*/*']
-
 const FILTER = {
-	urls: URLS,
+	urls: ['<all_urls>'],
 	types: TYPES,
 }
 
@@ -91,7 +89,7 @@ function init() {
 function listener(config) {
 	const { cloudName, transformation } = config
 	console.log(cloudName, transformation)
-	return async details => {
+	return details => {
 		const { url } = details
 
 		if (url === '' || url.startsWith('data')) {
