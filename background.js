@@ -1,15 +1,15 @@
 const CLOUDINARY_CLOUD_NAME = 'cext'
 const PREFIX = 'https://res.cloudinary.com/' + CLOUDINARY_CLOUD_NAME + '/image/fetch/f_auto,q_auto/'
 
-browser.webRequest.onBeforeRequest.addListener(function(details) {
-	return new Promise(function(resolve, reject) {
-	if (details.url.startsWith('data')) {
-		console.log('Not doing', details.url)
-		resolve(undefined)
+browser.webRequest.onBeforeRequest.addListener((details) => {
+	const { url } = details
+
+	// Prevent looping!
+	if (url.startsWith(PREFIX)) {
 		return
 	}
-	if (details.url.startsWith(PREFIX)) {
-		resolve(undefined)
+
+	if (url.startsWith('data') || url === '') {
 		return
 	}
 
@@ -20,25 +20,14 @@ browser.webRequest.onBeforeRequest.addListener(function(details) {
 	// See:
 	//  - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onBeforeSendHeaders
 	//  - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
-	if (details.url.endsWith('.svg')) {
-		resolve(undefined)
+	if (url.endsWith('.svg')) {
 		return
 	}
 
-	console.log(details)
-
-	try {
-		//console.log("Redirecting", details)
-		resolve({ "redirectUrl": PREFIX + details.url })
-		return
-	} catch (err) {
-		console.log("e: "+err);
-		reject(err)
-		return
-	}
-	})
-},
+	return { "redirectUrl": PREFIX + url }
+	},
 	{urls: ["http://*/*", "https://*/*"],
 	// For details on types, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType
 	types: ["image", "object", "imageset"]},
+	[ "blocking" ]
 );

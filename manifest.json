@@ -16,7 +16,7 @@
     }
   ],
 
-  "permissions": [ "webRequest", "<all_urls>" ],
+  "permissions": [ "webRequest", "<all_urls>", "webRequestBlocking" ],
 
   "background": {
       "scripts": [ "background.js" ]
