@@ -1,5 +1,10 @@
 // For details on types, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType
-const TYPES = ['image', 'object', 'imageset']
+const TYPES = ['image', 'object']
+
+if (!IS_CHROME) {
+	TYPES.push('imageset')
+}
+
 const URLS = ['http://*/*', 'https://*/*']
 
 const FILTER = {
@@ -7,7 +12,10 @@ const FILTER = {
 	types: TYPES,
 }
 
+// TODO
 function haveNetwork() {
+	return false
+/*
 	try {
 		return (
 			NetworkInformation !== undefined &&
@@ -17,9 +25,8 @@ function haveNetwork() {
 	} catch (e) {
 		return false
 	}
+*/
 }
-
-let onBeforeR
 
 // Sentinel value to represent that a WebRequest should carry on without
 // any modifications/redirects. See
@@ -31,7 +38,7 @@ async function getConfig(name) {
 	return value !== undefined ? value[name] : undefined
 }
 
-let registeredListener
+var registeredListener = undefined
 
 function disable() {
 	if (registeredListener !== undefined) {
@@ -47,6 +54,7 @@ async function enable() {
 	const cloudName = await getConfig('CLOUDINARY_CLOUD_NAME')
 	const transformation = await getConfig('CLOUDINARY_TRANSFORMATION')
 
+	console.log('Enabling MITM')
 	registeredListener = listener({ cloudName, transformation })
 
 	browser.webRequest.onBeforeRequest.addListener(registeredListener, FILTER, [

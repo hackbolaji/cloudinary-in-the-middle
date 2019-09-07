@@ -1,7 +1,3 @@
-if (browser === undefined) {
-	browser = require('webextension-polyfill');
-}
-
 const OPTIONS = [
 	{ id: 'CLOUDINARY_CLOUD_NAME', defaultValue: 'cext' },
 	{ id: 'CLOUDINARY_TRANSFORMATION', defaultValue: 'f_auto,q_auto' },
