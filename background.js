@@ -1,3 +1,7 @@
+if (browser === undefined) {
+	browser = require('webextension-polyfill');
+}
+
 // For details on types, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType
 const TYPES = ['image', 'object', 'imageset']
 const URLS = ['http://*/*', 'https://*/*']
