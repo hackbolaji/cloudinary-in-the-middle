@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Cloudinary Extension",
+  "version": "1.0",
+
+  "description": "No description defined.",
+
+  "icons": {
+    "48": "icons/border-48.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["ext.js"]
+    }
+  ],
+
+  "permissions": [ "webRequest", "<all_urls>", "webRequestBlocking" ],
+
+  "background": {
+      "scripts": [ "background.js" ]
+   }
+}
