@@ -11,12 +11,13 @@
 
 	"content_scripts": [
 		{
+			"permissions": ["blob:chrome-extension://*"],
 			"matches": ["<all_urls>"],
 			"js": ["ext.js"]
 		}
 	],
 
-	"permissions": ["webRequest", "<all_urls>", "webRequestBlocking", "storage"],
+	"permissions": ["webRequest", "<all_urls>", "webRequestBlocking", "storage", "blob:chrome-extension://*"],
 
 	"background": {
 		"scripts": [
