@@ -1,33 +1,130 @@
-const CLOUDINARY_CLOUD_NAME = 'cext'
-const PREFIX = 'https://res.cloudinary.com/' + CLOUDINARY_CLOUD_NAME + '/image/fetch/f_auto,q_auto/'
+// For details on types, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType
+const TYPES = ['image', 'object', 'imageset']
+const URLS = ['http://*/*', 'https://*/*']
 
-browser.webRequest.onBeforeRequest.addListener((details) => {
-	const { url } = details
+const FILTER = {
+	urls: URLS,
+	types: TYPES,
+}
 
-	// Prevent looping!
-	if (url.startsWith(PREFIX)) {
+function haveNetwork() {
+	try {
+		return (
+			NetworkInformation !== undefined &&
+			navigator !== undefined &&
+			navigator.connection !== undefined
+		)
+	} catch (e) {
+		return false
+	}
+}
+
+let onBeforeR
+
+// Sentinel value to represent that a WebRequest should carry on without
+// any modifications/redirects. See
+// https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/BlockingResponse
+const CARRY_ON = {}
+
+async function getConfig(name) {
+	const value = await browser.storage.sync.get(name)
+	return value !== undefined ? value[name] : undefined
+}
+
+let registeredListener
+
+function disable() {
+	if (registeredListener !== undefined) {
+		browser.webRequest.onBeforeRequest.removeListener(registeredListener)
+	}
+	registeredListener = undefined
+}
+
+async function enable() {
+	if (registeredListener !== undefined) {
 		return
 	}
+	const cloudName = await getConfig('CLOUDINARY_CLOUD_NAME')
+	const transformation = await getConfig('CLOUDINARY_TRANSFORMATION')
 
-	if (url.startsWith('data') || url === '') {
-		return
+	registeredListener = listener({ cloudName, transformation })
+
+	browser.webRequest.onBeforeRequest.addListener(registeredListener, FILTER, [
+		'blocking',
+	])
+}
+
+function handleMessage(request, sender, sendResponse) {
+	disable()
+	enable()
+}
+
+function controlByDownlink() {
+	// See
+	// https://developer.mozilla.org/en-US/docs/Web/API/NetworkInformation/downlink
+	const downLink = NetworkInformation.downlink
+	if (downlink < 4) {
+		enable()
+	} else {
+		disable()
 	}
+}
 
-	// TODO: Ideally check HTTP Accept header, but we are pre-request
-	// so we don't really know what the browser will use for Accept.
-	// Alternateively, use "onBeforeSendHeaders" but not clear if
-	// redirecting is possible that late...
-	// See:
-	//  - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onBeforeSendHeaders
-	//  - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
-	if (url.endsWith('.svg')) {
-		return
+function init() {
+	enable()
+	browser.runtime.onMessage.addListener(handleMessage)
+
+	if (haveNetwork()) {
+		navigator.connection.onchange = controlByDownlink
+		window.setInterval(controlByDownlink, 10000)
 	}
+}
 
-	return { "redirectUrl": PREFIX + url }
+function listener(config) {
+	const { cloudName, transformation } = config
+	console.log(cloudName, transformation)
+	return async details => {
+		const { url } = details
+
+		if (url === '' || url.startsWith('data')) {
+			return CARRY_ON
+		}
+
+		// TODO: Ideally check HTTP Accept header, but we are pre-request
+		// so we don't really know what the browser will use for Accept.
+		// Alternateively, use "onBeforeSendHeaders" but not clear if
+		// redirecting is possible that late...
+		// See:
+		//  - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/onBeforeSendHeaders
+		//  - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept
+		if (url.endsWith('.svg')) {
+			return CARRY_ON
+		}
+
+		const prefix =
+			'https://res.cloudinary.com/' +
+			cloudName +
+			'/image/fetch/' +
+			transformation +
+			'/'
+
+		// Prevent looping!
+		if (url.startsWith(prefix)) {
+			return CARRY_ON
+		}
+
+		const redirectUrl = prefix + url
+		console.log(url, '->', redirectUrl)
+		return { redirectUrl }
+	}
+}
+
+browser.webRequest.onAuthRequired.addListener(
+	() => {
+		console.log('authRequired', arguments)
 	},
-	{urls: ["http://*/*", "https://*/*"],
-	// For details on types, see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/ResourceType
-	types: ["image", "object", "imageset"]},
-	[ "blocking" ]
-);
+	FILTER,
+	['blocking']
+)
+
+init()
