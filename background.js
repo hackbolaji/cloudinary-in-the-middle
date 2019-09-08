@@ -92,7 +92,7 @@ function listener(config) {
 	return details => {
 		const { url } = details
 
-		if (url === '' || url.startsWith('data')) {
+		if (url === '' || url.length >= 255 || url.startsWith('data')) {
 			return CARRY_ON
 		}
 
