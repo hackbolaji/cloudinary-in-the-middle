@@ -157,19 +157,11 @@ function listener(config) {
 		var r = {obj:{}};
 		xmlHttp.onreadystatechange=function(){
 			if (xmlHttp.readyState==4 && xmlHttp.status==200) {
-				console.log('redirect successfull, sending data as string.');
-				console.log(xmlHttp);
-				const codes = new Uint8Array(stringToArrayBuffer(xmlHttp.response));
-				const blob = new Blob([codes])
-				console.log(blob);
-				
-				const urlCreator = window.URL || window.webkitURL;
-				const imageUrl = urlCreator.createObjectURL(blob);
-				console.log(imageUrl);
-				r.obj = { "redirectUrl": imageUrl };
+				console.log('redirect successfull, redirecting');
+				r.obj = { redirectUrl };
 			} else if (xmlHttp.status >=400){
 				console.log('redirect failed, downloading the real url');
-				r.obj = {"redirectUrl": url };
+				r.obj = CARRY_ON;
 			} else if (xmlHttp.status > 0){
 				console.log(xmlHttp.status);
 			}
