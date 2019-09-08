@@ -1,5 +1,5 @@
 {
-	"name": "junctionxvienna2019",
+	"name": "cloudinary-in-the-middle",
 	"version": "0.0.1",
 	"scripts": {
 		"fmt": "npx prettier --write '**/*.js{on,}'"
