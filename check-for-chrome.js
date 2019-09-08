@@ -1,1 +1,1 @@
-const IS_CHROME = (typeof browser === 'undefined')
+const IS_CHROME = typeof browser === 'undefined'

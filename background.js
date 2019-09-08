@@ -13,7 +13,7 @@ const FILTER = {
 // TODO
 function haveNetwork() {
 	return false
-/*
+	/*
 	try {
 		return (
 			NetworkInformation !== undefined &&
@@ -56,7 +56,7 @@ async function enable() {
 	registeredListener = listener({ cloudName, transformation })
 
 	browser.webRequest.onBeforeRequest.addListener(registeredListener, FILTER, [
-		'blocking'
+		'blocking',
 	])
 }
 
@@ -106,7 +106,7 @@ function listener(config) {
 		if (url.endsWith('.svg')) {
 			return CARRY_ON
 		}
-		
+
 		const prefix =
 			'https://res.cloudinary.com/' +
 			cloudName +
@@ -117,27 +117,27 @@ function listener(config) {
 		if (url.startsWith(prefix)) {
 			return CARRY_ON
 		}
-		
-		const redirectUrl = prefix + url;
-		console.log('trying redirect: ', url, '->', redirectUrl);
-		
-		var xmlHttp = new XMLHttpRequest();
-		var r = {obj:{}};
-		xmlHttp.onreadystatechange=function(){
-			if (xmlHttp.readyState==4 && xmlHttp.status==200) {
-				console.log('redirect successfull, redirecting');
-				r.obj = { redirectUrl };
-			} else if (xmlHttp.status >=400){
-				console.log('redirect failed, downloading the real url');
-				r.obj = CARRY_ON;
-			} else if (xmlHttp.status > 0){
-				console.log(xmlHttp.status);
+
+		const redirectUrl = prefix + url
+		console.log('trying redirect: ', url, '->', redirectUrl)
+
+		var xmlHttp = new XMLHttpRequest()
+		var r = { obj: {} }
+		xmlHttp.onreadystatechange = function() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				console.log('redirect successfull, redirecting')
+				r.obj = { redirectUrl }
+			} else if (xmlHttp.status >= 400) {
+				console.log('redirect failed, downloading the real url')
+				r.obj = CARRY_ON
+			} else if (xmlHttp.status > 0) {
+				console.log(xmlHttp.status)
 			}
 		}
-		xmlHttp.open('GET', redirectUrl, false);
-		xmlHttp.send(null);
+		xmlHttp.open('GET', redirectUrl, false)
+		xmlHttp.send(null)
 
-		const result = r.obj;
+		const result = r.obj
 		console.log(result)
 		return result
 	}
