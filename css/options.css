@@ -67,7 +67,7 @@ a:hover {
 
   color: #333333;
   text-align: center;
-
+  padding-top:20px;
 }
 
 .textSubheader {
@@ -130,7 +130,7 @@ a:hover {
 
 .mainbox {
   width: 460px;
-  min-height: 600px;
+  min-height: 500px;
 
   background: #fff;
   border-radius: 10px;
@@ -146,8 +146,11 @@ a:hover {
   justify-content: space-between;
   align-items: center;
 
-  padding: 40px 40px 40px 40px;
+  padding: 10px 10px 10px 10px;
 }
+
+form{
+width:100%;}
 
 .contentbox {
   padding: 10px 10px 10px 10px;
