@@ -1,20 +1,78 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
-  </head>
-  <body>
-    <form>
-	    <label><p>Cloudinary Cloud Name (<a href="https://cloudinary.com/documentation/solution_overview#cloud_name">What is this?</a>)</p><p><input type="text" id="CLOUDINARY_CLOUD_NAME" /></p></label>
-	    <label><p>Cloudinary Image Transformation (<a href="https://cloudinary.com/documentation/image_transformation_reference">What's this?</a> try "e_improve", "e_simulate_colorblind" or "e_sepia")</p><p><input type="text" id="CLOUDINARY_TRANSFORMATION" pattern="^([a-z_0-9\.:;\-]+)(,[a-z_0-9\.:;\-]+)*$"/></p></label>
-        <button type="submit">Save</button>
-	<br />
-	<p>Not registered yet? <a href="https://cloudinary.com/users/register/free">Sign up for a free account!</a></p>
-    </form>
+    <link rel="stylesheet" type="text/css" href="css/options.css">
+</head>
+<body>
 
-    <script src="node_modules/webextension-polyfill/dist/browser-polyfill.js"></script>
-    <script src="options.js"></script>
+<div class="background">
+    <div class="mainbox">
 
-  </body>
+
+        <form>
+            <div class="textHeader">
+                Options
+            </div>
+
+            <div class="contentbox">
+                <div class="textSubheader">Cloudinary Cloud Name</div>
+                <p/>
+                <input class="input" type="text" id="CLOUDINARY_CLOUD_NAME" placeholder="Your Cloud Name"/>
+                <p/>
+                <div class="textRegular">
+                    <a href="https://cloudinary.com/documentation/solution_overview#cloud_name">What is this?</a>
+                    <p/>
+                    Not registered yet? <a href="https://cloudinary.com/users/register/free">Sign up for a free
+                    account!</a>
+                </div>
+
+            </div>
+
+            <div class="contentbox">
+                <div class="textSubheader">Cloudinary Image Transformation</div>
+                <p/>
+                <input class="input" type="text" id="CLOUDINARY_TRANSFORMATION"
+                       pattern="^([a-z_0-9\.:;\-]+)(,[a-z_0-9\.:;\-]+)*$"
+                       placeholder="Option1,Option2,..."/>
+                <p/>
+
+                <div class="textCategory">Standard options:</div>
+
+                <div class="textRegular">
+                    f_auto (selects ideal format) <p/>
+                    q_auto (selects ideal quality) <p/>
+
+                </div>
+
+                <div class="textCategory">
+                    Advanced effects:
+
+                </div>
+
+                <div class="textRegular">
+                    e_sepia <p/>
+                    e_simulate_colorblind <p/>
+                    <a href="https://cloudinary.com/documentation/image_transformations"> More info</a>
+                </div>
+            </div>
+
+            <div class="buttonbox">
+                <button class="submitbutton" type="submit">
+                    Save
+                </button>
+            </div>
+
+        </form>
+
+        <script src="node_modules/webextension-polyfill/dist/browser-polyfill.js"></script>
+        <script src="options.js"></script>
+
+    </div>
+</div>
+</body>
 
 </html>
+
+
+
