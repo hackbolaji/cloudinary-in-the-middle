@@ -1,0 +1,43 @@
+Transformation used for testing:
+	f_auto,q_10
+
+Firefox used for testing:
+	68.0.2 with other extensions (personal) installed
+
+Connection:
+	eduroam WiFi
+
+orf.at (some small images)
+	without:
+			1.58MB / 720.29KB transferred
+			1.66s
+	with:
+			1.44MB / 578.96KB transferred
+			1.74s
+	result:
+			80.3%
+
+500px.com (some big images)
+	without:
+			7.25MB / 3.12MB transferred
+			5.73s
+	with:
+			5.48MB / 1.35MB transferred
+			5.61s
+	result:
+			43.3%
+
+news.ycombinator.com (no images)
+	with and without (no change):
+			45.66KB / 10.40KB transferred
+			444ms
+			0%
+
+9gag.com (many images)
+	with:
+			18.25MB / 14.48MB transferred
+			1.04min
+	without:
+			4.29MB / 1.68MB transferred
+			7.72s
+			SITE NOT FUNCTIONAL (due to tracking protection)
